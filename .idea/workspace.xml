@@ -2,16 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="802cd2a7-cb55-44fb-9e8f-a04116bf45c0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.cproject" beforeDir="false" afterPath="$PROJECT_DIR$/.cproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mxproject" beforeDir="false" afterPath="$PROJECT_DIR$/.mxproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/Src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Debug/Core/Src/main.d" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/Core/Src/main.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Debug/Core/Src/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/Core/Src/main.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Debug/Core/Src/main.su" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/Core/Src/main.su" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Debug/Core/Src/stm32f1xx_hal_msp.o" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/Core/Src/stm32f1xx_hal_msp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Debug/Core/Src/stm32f1xx_hal_msp.su" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/Core/Src/stm32f1xx_hal_msp.su" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Debug/Core/Src/subdir.mk" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/Core/Src/subdir.mk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Debug/canfilter.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/canfilter.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Debug/canfilter.elf" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/canfilter.elf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Debug/canfilter.list" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/canfilter.list" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Debug/canfilter.map" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/canfilter.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/canfilter.ioc" beforeDir="false" afterPath="$PROJECT_DIR$/canfilter.ioc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Debug/objects.list" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/objects.list" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,7 +24,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name=".mxproject" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.mxproject">
           <provider selected="true" editor-type-id="text-editor" />
@@ -34,7 +37,11 @@
       </file>
       <file leaf-file-name="main.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Core/Src/main.c">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-705">
+              <caret line="29" column="63" selection-start-line="29" selection-start-column="63" selection-end-line="29" selection-end-column="63" />
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -69,6 +76,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -79,13 +87,12 @@
             <path>
               <item name="canfilter" type="b2602c69:ProjectViewProjectNode" />
               <item name="canfilter" type="462c0819:PsiDirectoryNode" />
-              <item name="Drivers" type="462c0819:PsiDirectoryNode" />
+              <item name="Debug" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -118,36 +125,46 @@
       <option name="presentableId" value="Default" />
       <updated>1579041728116</updated>
       <workItem from="1579041729262" duration="1313000" />
+      <workItem from="1579112813973" duration="2333000" />
     </task>
+    <task id="LOCAL-00001" summary="Second Commit">
+      <created>1579113972963</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1579113972963</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1313000" />
+    <option name="totallyTimeSpent" value="3646000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="25" width="1926" height="1058" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Messages" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32937366" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info active="true" anchor="bottom" id="Version Control" visible="true" weight="0.32937366" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2497332" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2524013" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="MagicentoScripts" side_tool="true" />
+      <window_info anchor="bottom" id="MagicentoScripts" order="7" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,6 +172,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Second Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Second Commit" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.mxproject">
@@ -164,7 +185,24 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/Core/Src/main.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.mxproject">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.cproject">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Core/Src/main.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-705">
+          <caret line="29" column="63" selection-start-line="29" selection-start-column="63" selection-end-line="29" selection-end-column="63" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
