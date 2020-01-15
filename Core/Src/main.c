@@ -20,11 +20,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <string.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -103,6 +102,20 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
+		TxHeader.DLC = 8;
+		TxHeader.StdId = 545;
+
+		TxData[3] = 0x70;
+		if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan2) != 0) {
+			if (HAL_CAN_AddTxMessage(&hcan2, &TxHeader, TxData, &TxMailbox)
+					!= HAL_OK) {
+
+			}
+		}
+
+		HAL_Delay(3);
+		continue;
+
 		/* USER CODE END WHILE */
 		//HAL_Delay(100);
 		if (HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) != 0) {
@@ -118,19 +131,21 @@ int main(void) {
 			memcpy(TxData, RxData, 8);
 			TxHeader.DLC = RxHeader.DLC;
 			TxHeader.StdId = RxHeader.StdId;
-			/* Start the Transmission process */
-			if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox)
-					!= HAL_OK) {
-				/* Transmission request Error */
-				Error_Handler();
+			if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan2) != 0) {
+				if (HAL_CAN_AddTxMessage(&hcan2, &TxHeader, TxData, &TxMailbox)
+						!= HAL_OK) {
+					/* Transmission request Error */
+					HAL_CAN_ResetError(&hcan2);
+					//Error_Handler();
+				}
 			}
+
+			/* Start the Transmission process */
 
 		}
 
 		/* USER CODE BEGIN 3 */
 	}
-
-	/* USER CODE END 2 */
 
 	/* USER CODE END 2 */
 
@@ -176,6 +191,7 @@ void SystemClock_Config(void) {
 	/** Configure the Systick interrupt time
 	 */
 	__HAL_RCC_PLLI2S_ENABLE();
+
 }
 
 /**
@@ -210,23 +226,22 @@ static void MX_CAN1_Init(void) {
 	/* USER CODE BEGIN CAN1_Init 2 */
 
 	/*##-2- Configure the CAN Filter ###########################################*/
-	/*
-	 sFilterConfig.FilterBank = 0;
-	 sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
-	 sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
-	 sFilterConfig.FilterIdHigh = 0x0000;
-	 sFilterConfig.FilterIdLow = 0x0000;
-	 sFilterConfig.FilterMaskIdHigh = 0x0000;
-	 sFilterConfig.FilterMaskIdLow = 0x0000;
-	 sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
-	 sFilterConfig.FilterActivation = ENABLE;
-	 sFilterConfig.SlaveStartFilterBank = 14;
-	 */
 
-	//if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK) {
-	/* Filter configuration Error */
-	//Error_Handler();
-	//}
+	sFilterConfig.FilterBank = 0;
+	sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+	sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+	sFilterConfig.FilterIdHigh = 0x0000;
+	sFilterConfig.FilterIdLow = 0x0000;
+	sFilterConfig.FilterMaskIdHigh = 0x0000;
+	sFilterConfig.FilterMaskIdLow = 0x0000;
+	sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+	sFilterConfig.FilterActivation = ENABLE;
+	sFilterConfig.SlaveStartFilterBank = 14;
+
+	if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK) {
+		/* Filter configuration Error */
+		Error_Handler();
+	}
 	/*##-3- Start the CAN peripheral ###########################################*/
 	if (HAL_CAN_Start(&hcan1) != HAL_OK) {
 		/* Start Error */
@@ -259,13 +274,12 @@ static void MX_CAN1_Init(void) {
 static void MX_CAN2_Init(void) {
 
 	/* USER CODE BEGIN CAN2_Init 0 */
-
+	CAN_FilterTypeDef sFilterConfig;
 	/* USER CODE END CAN2_Init 0 */
 
 	/* USER CODE BEGIN CAN2_Init 1 */
 
 	/* USER CODE END CAN2_Init 1 */
-
 	hcan2.Instance = CAN2;
 	hcan2.Init.Prescaler = 6;
 	hcan2.Init.Mode = CAN_MODE_NORMAL;
@@ -278,18 +292,31 @@ static void MX_CAN2_Init(void) {
 	hcan2.Init.AutoRetransmission = DISABLE;
 	hcan2.Init.ReceiveFifoLocked = DISABLE;
 	hcan2.Init.TransmitFifoPriority = DISABLE;
-
 	if (HAL_CAN_Init(&hcan2) != HAL_OK) {
 		Error_Handler();
 	}
 
-	if (HAL_CAN_Start(&hcan2) != HAL_OK) {
-		/* Start Error */
+	sFilterConfig.FilterBank = 15;
+	sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+	sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+	sFilterConfig.FilterIdHigh = 0x0000;
+	sFilterConfig.FilterIdLow = 0x0000;
+	sFilterConfig.FilterMaskIdHigh = 0x0000;
+	sFilterConfig.FilterMaskIdLow = 0x0000;
+	sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO1;
+	sFilterConfig.FilterActivation = ENABLE;
+	sFilterConfig.SlaveStartFilterBank = 15;
+
+	if (HAL_CAN_ConfigFilter(&hcan2, &sFilterConfig) != HAL_OK) {
+		/* Filter configuration Error */
 		Error_Handler();
 	}
 
 	/* USER CODE BEGIN CAN2_Init 2 */
-
+	if (HAL_CAN_Start(&hcan2) != HAL_OK) {
+		/* Start Error */
+		Error_Handler();
+	}
 	/* USER CODE END CAN2_Init 2 */
 
 }
@@ -334,15 +361,14 @@ void Error_Handler(void) {
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
-	while (1) {
-		/* USER CODE END WHILE */
 
-		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_10);
-		HAL_Delay(300);
+	//while (1) {
+	/* USER CODE END WHILE */
 
-		/* USER CODE BEGIN 3 */
-	}
-
+	//HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_10);
+	//HAL_Delay(300);
+	/* USER CODE BEGIN 3 */
+	//}
 	/* USER CODE END Error_Handler_Debug */
 }
 
