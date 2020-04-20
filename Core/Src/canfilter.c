@@ -57,17 +57,20 @@ void copyData() {
 	TxHeader.StdId = RxHeader.StdId;
 	TxHeader.RTR = CAN_RTR_DATA;
 	TxHeader.IDE = CAN_ID_STD;
+	TxHeader.TransmitGlobalTime = 0;
 	filtercan(RxHeader.StdId);
 
 }
 void filtercan(int airbid) {
 	if (airbid == 0x316) {
+		// Calculate and store RPM
 		uint8_t d1 = TxData[2];
 		uint8_t d2 = TxData[3];
 		rpm = ((uint16_t) d2 << 8) | d1;
 		rpm = rpm / 6.4;
 	}
 	if(airbid == 0x545){
+		// Put RPM into the bytes:
 		//rpm = 7000;
 		int number = rpm / 1000;
 		number = number * 16;
