@@ -60,6 +60,42 @@ static void MX_CAN2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void transferCan(CAN_HandleTypeDef *hcan) {
+	CAN_HandleTypeDef *targetCan;
+	uint32_t fifo;
+	if (hcan->Instance == CAN2) {
+		targetCan = &hcan1;
+		fifo = CAN_RX_FIFO1;
+	} else {
+		targetCan = &hcan2;
+		fifo = CAN_RX_FIFO0;
+	}
+	if (HAL_CAN_GetRxMessage(hcan, fifo, &RxHeader, RxData) != HAL_OK) {
+		/* Reception Error */
+		Error_Handler();
+	}
+	copyData();
+	if (HAL_CAN_GetTxMailboxesFreeLevel(targetCan) != 0) {
+		if (HAL_CAN_AddTxMessage(targetCan, &TxHeader, TxData, &TxMailbox)
+				!= HAL_OK) {
+			/* Transmission request Error */
+			HAL_CAN_ResetError(targetCan);
+			//Error_Handler();
+		}
+	}
+
+}
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+
+{
+	transferCan(hcan);
+}
+
+void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
+
+{
+	transferCan(hcan);
+}
 
 /* USER CODE END 0 */
 
@@ -93,9 +129,49 @@ int main(void) {
 	MX_CAN1_Init();
 	MX_CAN2_Init();
 	/* USER CODE BEGIN 2 */
-	canloop(&hcan1, &hcan2);
+
+	sFilterConfig1.FilterBank = 0;
+	sFilterConfig1.FilterMode = CAN_FILTERMODE_IDMASK;
+	sFilterConfig1.FilterScale = CAN_FILTERSCALE_32BIT;
+	sFilterConfig1.FilterIdHigh = 0x0000;
+	sFilterConfig1.FilterIdLow = 0x0000;
+	sFilterConfig1.FilterMaskIdHigh = 0x0000;
+	sFilterConfig1.FilterMaskIdLow = 0x0000;
+	sFilterConfig1.FilterFIFOAssignment = CAN_RX_FIFO0;
+	sFilterConfig1.FilterActivation = ENABLE;
+	sFilterConfig1.SlaveStartFilterBank = 14;
+	HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig1);
+
+	sFilterConfig2.FilterBank = 14;
+	sFilterConfig2.FilterMode = CAN_FILTERMODE_IDMASK;
+	sFilterConfig2.FilterScale = CAN_FILTERSCALE_32BIT;
+	sFilterConfig2.FilterIdHigh = 0x0000;
+	sFilterConfig2.FilterIdLow = 0x0000;
+	sFilterConfig2.FilterMaskIdHigh = 0x0000;
+	sFilterConfig2.FilterMaskIdLow = 0x0000;
+	sFilterConfig2.FilterFIFOAssignment = CAN_RX_FIFO1;
+	sFilterConfig2.FilterActivation = ENABLE;
+	sFilterConfig2.SlaveStartFilterBank = 14;
+	HAL_CAN_ConfigFilter(&hcan2, &sFilterConfig2);
+
+	HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
+	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO1_MSG_PENDING);
+
+	//HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO1_MSG_PENDING);
+	//canloop(&hcan1, &hcan2);
+	while (1) {
+		HAL_Delay(100);
+	}
 
 	/* USER CODE END 2 */
+
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
+
+	//while (1) {
+	/* USER CODE END WHILE */
+
+	/* USER CODE BEGIN 3 */
 
 	/* USER CODE END 3 */
 }
@@ -153,7 +229,6 @@ static void MX_CAN1_Init(void) {
 	/* USER CODE END CAN1_Init 0 */
 
 	/* USER CODE BEGIN CAN1_Init 1 */
-	CAN_FilterTypeDef sFilterConfig;
 	/* USER CODE END CAN1_Init 1 */
 	hcan1.Instance = CAN1;
 	hcan1.Init.Prescaler = 6;
@@ -171,31 +246,11 @@ static void MX_CAN1_Init(void) {
 		Error_Handler();
 	}
 	/* USER CODE BEGIN CAN1_Init 2 */
-
-	/*##-2- Configure the CAN Filter ###########################################*/
-
-	sFilterConfig.FilterBank = 0;
-	sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
-	sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
-	sFilterConfig.FilterIdHigh = 0x0000;
-	sFilterConfig.FilterIdLow = 0x0000;
-	sFilterConfig.FilterMaskIdHigh = 0x0000;
-	sFilterConfig.FilterMaskIdLow = 0x0000;
-	sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
-	sFilterConfig.FilterActivation = ENABLE;
-	sFilterConfig.SlaveStartFilterBank = 14;
-
-	if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK) {
-		/* Filter configuration Error */
-		Error_Handler();
-	}
-	/*##-3- Start the CAN peripheral ###########################################*/
 	if (HAL_CAN_Start(&hcan1) != HAL_OK) {
 		/* Start Error */
 		Error_Handler();
 	}
-
-
+	/* USER CODE END CAN1_Init 2 */
 
 }
 
@@ -207,7 +262,6 @@ static void MX_CAN1_Init(void) {
 static void MX_CAN2_Init(void) {
 
 	/* USER CODE BEGIN CAN2_Init 0 */
-	CAN_FilterTypeDef sFilterConfig;
 	/* USER CODE END CAN2_Init 0 */
 
 	/* USER CODE BEGIN CAN2_Init 1 */
@@ -226,22 +280,6 @@ static void MX_CAN2_Init(void) {
 	hcan2.Init.ReceiveFifoLocked = DISABLE;
 	hcan2.Init.TransmitFifoPriority = DISABLE;
 	if (HAL_CAN_Init(&hcan2) != HAL_OK) {
-		Error_Handler();
-	}
-
-	sFilterConfig.FilterBank = 15;
-	sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
-	sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
-	sFilterConfig.FilterIdHigh = 0x0000;
-	sFilterConfig.FilterIdLow = 0x0000;
-	sFilterConfig.FilterMaskIdHigh = 0x0000;
-	sFilterConfig.FilterMaskIdLow = 0x0000;
-	sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO1;
-	sFilterConfig.FilterActivation = ENABLE;
-	sFilterConfig.SlaveStartFilterBank = 15;
-
-	if (HAL_CAN_ConfigFilter(&hcan2, &sFilterConfig) != HAL_OK) {
-		/* Filter configuration Error */
 		Error_Handler();
 	}
 	/* USER CODE BEGIN CAN2_Init 2 */

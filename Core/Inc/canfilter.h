@@ -8,6 +8,8 @@
 #ifndef INC_CANFILTER_H_
 #define INC_CANFILTER_H_
 
+CAN_FilterTypeDef sFilterConfig1;
+CAN_FilterTypeDef sFilterConfig2;
 CAN_TxHeaderTypeDef TxHeader;
 uint8_t TxData[8];
 uint32_t TxMailbox;
